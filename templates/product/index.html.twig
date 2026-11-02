@@ -1,0 +1,162 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos sweats | Stubborn{% endblock %}
+
+{% block body %}
+<style>
+    .shop {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 0 24px;
+        color: #ffffff;
+    }
+
+    .shop h1 {
+        color: #ffffff;
+        font-size: 42px;
+        text-transform: uppercase;
+        font-weight: 900;
+    }
+
+    .shop > p {
+        color: #cccccc;
+        margin-top: 12px;
+    }
+
+    .filters {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 24px 0 32px;
+    }
+
+    .filters a {
+        padding: 7px 11px;
+        border: 1px solid #444444;
+        background: #171717;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 11px;
+        border-radius: 3px;
+        transition: background 0.2s;
+    }
+
+    .filters a:hover {
+        background: #e32636;
+        border-color: #e32636;
+        color: #ffffff;
+    }
+
+    .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+    }
+
+    .product {
+        display: block;
+        border: 1px solid #333333;
+        padding: 16px;
+        background: #171717;
+        text-decoration: none;
+        color: #ffffff;
+        transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .product:hover {
+        border-color: #e32636;
+        transform: translateY(-3px);
+    }
+
+    .product img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+        background: #252525;
+        margin-bottom: 16px;
+    }
+
+    .product h2 {
+        color: #ffffff;
+        font-size: 19px;
+        text-transform: uppercase;
+        margin: 10px 0;
+    }
+
+    .product .price {
+        font-weight: 800;
+        color: #ff334b;
+        font-size: 20px;
+    }
+
+    .product strong {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 6px 9px;
+        background: #e32636;
+        color: #ffffff;
+        font-size: 11px;
+    }
+
+    @media (max-width: 600px) {
+        .shop {
+            margin: 30px auto;
+            padding: 0 16px;
+        }
+
+        .shop h1 {
+            font-size: 30px;
+        }
+
+        .products {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .product {
+            padding: 10px;
+        }
+    }
+</style>
+
+<main class="shop">
+    <h1>La collection Stubborn</h1>
+    <p>Don't compromise on your look.</p>
+
+    <nav class="filters">
+        <a href="{{ path('app_products') }}">Tous les sweats</a>
+        <a href="{{ path('app_products', {min: 1000, max: 2000}) }}">10–20 €</a>
+        <a href="{{ path('app_products', {min: 2001, max: 3000}) }}">20–30 €</a>
+        <a href="{{ path('app_products', {min: 3001, max: 4000}) }}">30–40 €</a>
+        <a href="{{ path('app_products', {min: 4001, max: 5000}) }}">40–50 €</a>
+        <a href="{{ path('app_products', {min: 5001, max: 6000}) }}">50–60 €</a>
+    </nav>
+
+    <div class="products">
+        {% for product in products %}
+            <a class="product" href="{{ path('app_product_show', {id: product.id}) }}">
+                <img
+                    src="{{ product.image ?: '/images/placeholder.jpg' }}"
+                    alt="{{ product.name }}"
+                    loading="lazy"
+                >
+
+                <h2>{{ product.name }}</h2>
+
+                <p class="price">
+                    {{ (product.price / 100)|number_format(2, ',', ' ') }} €
+                </p>
+
+                {% if product.isFeatured %}
+                    <strong>COUP DE CŒUR</strong>
+                {% endif %}
+            </a>
+        {% else %}
+            <p>Aucun produit dans cette gamme de prix.</p>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

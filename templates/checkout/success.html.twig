@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement réussi - Stubborn{% endblock %}
+
+{% block body %}
+<section style="max-width:700px;margin:80px auto;padding:30px;text-align:center">
+    <h1>Paiement terminé</h1>
+    <p>Merci pour votre commande chez Stubborn.</p>
+    <p>Cette page de retour ne confirme pas à elle seule le paiement.</p>
+    <a href="{{ path('app_products') }}">Retour à la boutique</a>
+</section>
+{% endblock %}

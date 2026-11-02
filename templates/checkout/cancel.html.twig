@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement annulé - Stubborn{% endblock %}
+
+{% block body %}
+<section style="max-width:700px;margin:80px auto;padding:30px;text-align:center">
+    <h1>Paiement annulé</h1>
+    <p>Votre paiement n’a pas été finalisé. Vous pouvez revenir au panier.</p>
+    <a href="{{ path('app_cart') }}">Retour au panier</a>
+</section>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}STUBBORN — Streetwear{% endblock %}
+
+{% block body %}
+<style>
+    .hero {
+        min-height: 390px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 65px 20px;
+        background: radial-gradient(ellipse at center, #292929 0%, #090909 70%);
+    }
+    .hero h1 {
+        font-size: clamp(48px, 9vw, 100px);
+        font-weight: 900;
+        letter-spacing: 8px;
+        margin: 0;
+    }
+    .hero p {
+        color: #aaa;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin: 18px 0 30px;
+    }
+    .stubborn-btn {
+        display: inline-block;
+        background: white;
+        color: black;
+        padding: 14px 30px;
+        text-decoration: none;
+        font-weight: bold;
+        letter-spacing: 2px;
+        transition: .2s;
+    }
+    .stubborn-btn:hover { background: #ccc; color: black; }
+    .home-section { max-width: 1200px; margin: 55px auto; padding: 0 22px; }
+    .home-section h2 { text-align: center; letter-spacing: 4px; margin-bottom: 35px; }
+    .home-products {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 24px;
+    }
+    .home-card { color: white; text-decoration: none; }
+    .home-card img {
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+        display: block;
+        background: #1b1b1b;
+        transition: .25s;
+    }
+    .home-card:hover img { transform: translateY(-5px); }
+    .home-card h3 { margin: 14px 0 5px; }
+    .home-card p { color: #aaa; margin: 0; }
+    .home-bottom { text-align: center; padding: 35px 20px 65px; }
+    @media (max-width: 600px) {
+        .hero { min-height: 300px; }
+        .hero h1 { letter-spacing: 3px; }
+    }
+</style>
+
+<section class="hero">
+    <h1>STUBBORN</h1>
+    <p>Stay different. Stay stubborn.</p>
+    <a class="stubborn-btn" href="{{ path('app_products') }}">DÉCOUVRIR LA COLLECTION</a>
+</section>
+
+<section class="home-section">
+    <h2>LA COLLECTION</h2>
+
+    <div class="home-products">
+        {% for product in products %}
+            <a class="home-card" href="{{ path('app_product_show', {id: product.id}) }}">
+                {% if product.image %}
+                    <img src="{{ asset(product.image) }}" alt="{{ product.name }}">
+                {% else %}
+                    <div style="aspect-ratio:4/5;background:#222;"></div>
+                {% endif %}
+                <h3>{{ product.name }}</h3>
+                <p>{{ (product.price / 100)|number_format(2, ',', ' ') }} €</p>
+            </a>
+        {% else %}
+            <p>Aucun produit disponible pour le moment.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<div class="home-bottom">
+    <a class="stubborn-btn" href="{{ path('app_products') }}">VOIR TOUS LES PRODUITS</a>
+</div>
+{% endblock %}

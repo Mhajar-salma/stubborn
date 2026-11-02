@@ -1,0 +1,201 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon panier | Stubborn{% endblock %}
+
+{% block body %}
+
+<style>
+.cart-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+    color: white;
+}
+.cart-container h1 {
+    text-align: center;
+    letter-spacing: 5px;
+    margin-bottom: 40px;
+}
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding: 20px 0;
+    border-bottom: 1px solid #333;
+}
+.cart-item img {
+    width: 110px;
+    height: 130px;
+    object-fit: cover;
+    background: #222;
+}
+.cart-info { flex: 1; }
+.cart-info h3 { margin: 0 0 10px; }
+.cart-info p { color: #aaa; margin: 5px 0; }
+.quantity-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+.quantity-form input {
+    width: 55px;
+    padding: 10px 5px;
+    background: #292929;
+    color: white;
+    border: 1px solid #777;
+    text-align: center;
+    appearance: textfield;
+}
+.quantity-form input::-webkit-inner-spin-button,
+.quantity-form input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+.quantity-step {
+    width: 38px;
+    height: 38px;
+    border: 1px solid white;
+    background: #292929;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+}
+.quantity-step:hover {
+    background: white;
+    color: black;
+}
+.cart-button {
+    padding: 10px 16px;
+    border: 1px solid white;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+.cart-button:hover { background: white; color: black; }
+.remove-button { border-color: #a44; color: #ffaaaa; }
+.cart-total {
+    text-align: right;
+    font-size: 24px;
+    margin: 35px 0;
+}
+.cart-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.checkout-button {
+    background: white;
+    color: black;
+    font-weight: bold;
+}
+.empty-cart { text-align: center; padding: 70px 20px; }
+
+@media(max-width: 600px) {
+    .cart-item { align-items: flex-start; gap: 12px; }
+    .cart-item img { width: 85px; height: 110px; }
+}
+</style>
+
+<div class="cart-container">
+    <h1>MON PANIER</h1>
+
+    {% for key, item in cart %}
+        <div class="cart-item">
+
+            {% if item.image|default(null) %}
+                <img src="{{ asset(item.image) }}" alt="{{ item.name }}">
+            {% else %}
+                <div style="width:110px;height:130px;background:#222;"></div>
+            {% endif %}
+
+            <div class="cart-info">
+                <h3>{{ item.name }}</h3>
+                <p>Taille : {{ item.size }}</p>
+                <p>Prix unitaire : {{ item.price|number_format(2, ',', ' ') }} €</p>
+
+                <form class="quantity-form"
+                      method="post"
+                      action="{{ path('app_cart_quantity', {key: key}) }}">
+
+                    <label for="quantity-{{ loop.index }}">Quantité :</label>
+
+                    <button class="quantity-step"
+                            type="button"
+                            onclick="changeQuantity(this, -1)">−</button>
+
+                    <input
+                        id="quantity-{{ loop.index }}"
+                        class="quantity-input"
+                        type="number"
+                        name="quantity"
+                        min="0"
+                        value="{{ item.quantity }}"
+                    >
+
+                    <button class="quantity-step"
+                            type="button"
+                            onclick="changeQuantity(this, 1)">+</button>
+                </form>
+
+                <p>
+                    Sous-total :
+                    <strong>
+                        {{ (item.price * item.quantity)|number_format(2, ',', ' ') }} €
+                    </strong>
+                </p>
+            </div>
+
+            <form method="post"
+                  action="{{ path('app_cart_remove', {key: key}) }}">
+                <button class="cart-button remove-button" type="submit">
+                    Supprimer
+                </button>
+            </form>
+
+        </div>
+    {% else %}
+        <div class="empty-cart">
+            <h2>Ton panier est vide.</h2>
+            <a class="cart-button" href="{{ path('app_products') }}">
+                DÉCOUVRIR LA COLLECTION
+            </a>
+        </div>
+    {% endfor %}
+
+    {% if cart is not empty %}
+        <div class="cart-total">
+            Total :
+            <strong>{{ total|number_format(2, ',', ' ') }} €</strong>
+        </div>
+
+        <div class="cart-actions">
+            <a class="cart-button" href="{{ path('app_products') }}">
+                Continuer mes achats
+            </a>
+
+            <a class="cart-button checkout-button" href="{{ path('app_checkout') }}">
+                PASSER AU PAIEMENT
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function changeQuantity(button, difference) {
+    const input = button.parentElement.querySelector('.quantity-input');
+    const current = parseInt(input.value, 10) || 0;
+
+    input.value = Math.max(0, current + difference);
+    input.closest('form').requestSubmit();
+}
+
+document.querySelectorAll('.quantity-input').forEach(input => {
+    input.addEventListener('change', function () {
+        this.closest('form').requestSubmit();
+    });
+});
+</script>
+
+{% endblock %}

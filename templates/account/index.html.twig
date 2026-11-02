@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte | Stubborn{% endblock %}
+
+{% block body %}
+<main style="max-width:850px;margin:60px auto;padding:30px;background:#fff;color:#171717;">
+    <h1>MON COMPTE.</h1>
+    <p>Bienvenue chez Stubborn !</p>
+    <p><strong>Adresse e-mail :</strong> {{ app.user.email }}</p>
+    <a href="{{ path('app_products') }}">Découvrir la collection</a>
+    <p><a href="{{ path('app_logout') }}">Se déconnecter</a></p>
+</main>
+{% endblock %}

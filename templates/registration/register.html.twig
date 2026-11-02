@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription - Stubborn{% endblock %}
+
+{% block body %}
+<div style="max-width:450px;margin:60px auto;padding:30px;background:#171717;border-radius:12px;color:white;">
+    <h1>Créer un compte</h1>
+
+    {% for message in app.flashes('error') %}
+        <p style="color:#ff6b6b;">{{ message }}</p>
+    {% endfor %}
+
+    <form method="post">
+        <label for="email">Adresse e-mail</label>
+        <input id="email" type="email" name="email" required autocomplete="email"
+               style="display:block;width:100%;padding:12px;margin:10px 0 20px;">
+
+        <label for="password">Mot de passe (8 caractères minimum)</label>
+        <input id="password" type="password" name="password" required minlength="8"
+               autocomplete="new-password"
+               style="display:block;width:100%;padding:12px;margin:10px 0 20px;">
+
+        <button type="submit" style="padding:12px 25px;background:white;color:black;border:0;cursor:pointer;">
+            Créer mon compte
+        </button>
+    </form>
+
+    <p>Déjà inscrit ? <a href="{{ path('app_login') }}">Se connecter</a></p>
+</div>
+{% endblock %}

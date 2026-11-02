@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion — STUBBORN{% endblock %}
+
+{% block body %}
+
+<style>
+    .login-wrap {
+        min-height: 75vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 45px 20px;
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 430px;
+        padding: 38px;
+        border: 1px solid #333;
+        background: #111;
+    }
+
+    .login-box h1 {
+        text-align: center;
+        letter-spacing: 5px;
+        font-size: 32px;
+        margin: 0 0 8px;
+    }
+
+    .login-subtitle {
+        text-align: center;
+        color: #999;
+        margin-bottom: 30px;
+    }
+
+    .login-box label {
+        display: block;
+        margin: 18px 0 8px;
+    }
+
+    .login-box input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 13px;
+        color: white;
+        background: #080808;
+        border: 1px solid #444;
+        outline: none;
+    }
+
+    .login-box input:focus {
+        border-color: white;
+    }
+
+    .login-box button {
+        width: 100%;
+        margin-top: 25px;
+        padding: 14px;
+        border: 0;
+        background: white;
+        color: black;
+        font-weight: bold;
+        letter-spacing: 2px;
+        cursor: pointer;
+    }
+
+    .login-error {
+        padding: 12px;
+        background: #351313;
+        color: #ffbaba;
+        margin-bottom: 15px;
+    }
+
+    .login-success {
+        padding: 12px;
+        background: #15351d;
+        color: #b8f5c5;
+        margin-bottom: 15px;
+        overflow-wrap: anywhere;
+    }
+
+    .register-link {
+        text-align: center;
+        margin-top: 25px;
+        color: #aaa;
+    }
+
+    .register-link a {
+        color: white;
+        text-decoration: underline;
+        font-weight: bold;
+    }
+</style>
+
+<div class="login-wrap">
+    <div class="login-box">
+
+        <h1>STUBBORN</h1>
+        <p class="login-subtitle">RAVI DE TE REVOIR.</p>
+
+        {% for message in app.flashes('success') %}
+            <div class="login-success">{{ message }}</div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="login-error">{{ message }}</div>
+        {% endfor %}
+
+        {% if error %}
+            <div class="login-error">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            <label for="username">Adresse e-mail</label>
+            <input
+                type="email"
+                id="username"
+                name="_username"
+                value="{{ last_username }}"
+                autocomplete="email"
+                required
+                autofocus
+            >
+
+            <label for="password">Mot de passe</label>
+            <input
+                type="password"
+                id="password"
+                name="_password"
+                autocomplete="current-password"
+                required
+            >
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit">SE CONNECTER</button>
+        </form>
+
+        <div class="register-link">
+            Pas encore de compte ?
+            <a href="{{ path('app_register') }}">Créer un compte</a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
